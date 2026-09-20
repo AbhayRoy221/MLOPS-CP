@@ -1,0 +1,5 @@
+outs:
+- md5: 9fe030098c0059368dd47c7096ced99a
+  size: 293600
+  hash: md5
+  path: day28_base_cohort.parquet
