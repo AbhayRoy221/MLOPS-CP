@@ -1,0 +1,16 @@
+raw_data_dir: "data/raw"
+cutoff_day: 28
+expected_files:
+  - "studentInfo.csv"
+  - "studentRegistration.csv"
+  - "courses.csv"
+  - "assessments.csv"
+  - "studentAssessment.csv"
+  - "vle.csv"
+  - "studentVle.csv"
+fairness_attributes:
+  - "gender"
+  - "disability"
+  - "age_band"
+  - "region"
+  - "imd_band"
