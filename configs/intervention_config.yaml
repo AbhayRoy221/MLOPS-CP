@@ -1,0 +1,47 @@
+risk_tiers:
+  low:
+    min_probability: 0.0
+    max_probability: 0.20
+  moderate:
+    min_probability: 0.20
+    max_probability: 0.30
+  high:
+    min_probability: 0.30
+    max_probability: 0.50
+  critical:
+    min_probability: 0.50
+    max_probability: 1.0
+
+intervention_rules:
+  low:
+    intervention_level: "monitoring"
+    human_review_required: false
+    recommended_actions:
+      - "routine monitoring"
+      - "provide standard learning resources"
+      - "no immediate escalation"
+  moderate:
+    intervention_level: "academic check-in"
+    human_review_required: false
+    recommended_actions:
+      - "academic check-in"
+      - "study-planning support"
+      - "recommend relevant learning resources"
+      - "monitor engagement"
+  high:
+    intervention_level: "advisor/tutor outreach"
+    human_review_required: true
+    recommended_actions:
+      - "advisor/tutor outreach"
+      - "personalized academic support"
+      - "review recent engagement/assessment activity"
+      - "consider follow-up by a human advisor"
+  critical:
+    intervention_level: "priority human review"
+    human_review_required: true
+    recommended_actions:
+      - "priority human review"
+      - "advisor intervention"
+      - "individualized academic support"
+      - "review relevant academic and engagement information"
+      - "consider immediate supportive follow-up"

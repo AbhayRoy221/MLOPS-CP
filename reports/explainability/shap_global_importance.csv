@@ -1,0 +1,40 @@
+feature,mean_abs_shap,rank
+num__asm_mean_score,0.35244942,1
+num__studied_credits,0.16477132,2
+num__asm_average_delay,0.15772304,3
+num__vle_active_days,0.107225224,4
+num__vle_days_since_last_activity,0.10175463,5
+num__registration_day,0.09923504,6
+cat__code_module_GGG,0.097810976,7
+cat__highest_education_Lower Than A Level,0.09536304,8
+cat__code_module_BBB,0.09198156,9
+cat__code_module_DDD,0.084611975,10
+num__vle_clicks_last_7_days,0.08193582,11
+cat__code_module_CCC,0.07840694,12
+num__vle_total_clicks,0.07639788,13
+num__vle_clicks_last_14_days,0.07101949,14
+cat__code_module_FFF,0.07034886,15
+num__vle_quiz_clicks,0.068339966,16
+num__vle_resource_clicks,0.06363099,17
+num__vle_forum_clicks,0.05736217,18
+cat__code_module_EEE,0.050253,19
+num__module_presentation_length,0.049832135,20
+cat__highest_education_A Level or Equivalent,0.029264983,21
+cat__code_presentation_2013J,0.026377859,22
+num__vle_activity_type_diversity,0.021646177,23
+cat__code_module_AAA,0.019393172,24
+num__asm_failed_count,0.017961523,25
+num__asm_score_std,0.017577399,26
+num__missingindicator_asm_mean_score,0.012084699,27
+cat__code_presentation_2014B,0.010872499,28
+num__num_of_prev_attempts,0.0098158335,29
+num__asm_submission_count,0.007536778,30
+cat__code_presentation_2013B,0.006493754,31
+cat__code_presentation_2014J,0.0054550655,32
+cat__highest_education_HE Qualification,0.0048410543,33
+cat__highest_education_No Formal quals,0.004519324,34
+cat__highest_education_Post Graduate Qualification,0.0017147067,35
+num__missingindicator_vle_days_since_last_activity,0.0,36
+num__missingindicator_asm_average_delay,0.0,37
+num__missingindicator_asm_score_std,0.0,38
+num__missingindicator_registration_day,0.0,39
