@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request, Response, HTTPException
 import time
 import logging
 from src.api.schemas import PredictiveFeatures, PredictionResponse, HealthResponse
 from src.api.inference import inference_service
+from src.monitoring.application_metrics import PREDICTION_REQUESTS, PREDICTION_ERRORS, PREDICTION_LATENCY, metrics_endpoint
 
 # Setup minimal safe logging
 logging.basicConfig(level=logging.INFO)
@@ -37,6 +38,18 @@ def health_check():
     status = "healthy" if loaded else "unhealthy"
     return HealthResponse(status=status, model_loaded=loaded)
 
+@app.get("/metrics")
+def get_metrics(request: Request):
+    return metrics_endpoint(request)
+
 @app.post("/predict", response_model=PredictionResponse)
 def predict(features: PredictiveFeatures, include_explanation: bool = False):
-    return inference_service.predict(features, include_explanation=include_explanation)
+    PREDICTION_REQUESTS.inc()
+    start_time = time.time()
+    try:
+        result = inference_service.predict(features, include_explanation=include_explanation)
+        PREDICTION_LATENCY.observe(time.time() - start_time)
+        return result
+    except Exception as e:
+        PREDICTION_ERRORS.inc()
+        raise HTTPException(status_code=500, detail=str(e))

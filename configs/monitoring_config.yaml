@@ -1,0 +1,22 @@
+monitoring:
+  reference_data_path: "data/processed/splits/development_train.parquet"
+  drift:
+    psi_thresholds:
+      no_drift: 0.10
+      moderate_drift: 0.25
+    tvd_thresholds:
+      no_drift: 0.05
+      moderate_drift: 0.15
+  fairness:
+    min_group_size: 30
+    sensitive_attributes:
+      - "gender"
+      - "disability"
+      - "age_band"
+      - "region"
+      - "imd_band"
+  risk_tiers:
+    LOW: [0.0, 0.20]
+    MODERATE: [0.20, 0.30]
+    HIGH: [0.30, 0.50]
+    CRITICAL: [0.50, 1.0]
