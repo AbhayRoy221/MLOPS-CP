@@ -1,0 +1,48 @@
+# Step 2.14: Automated ML Pipeline Configuration
+# References existing configs — does not redefine model, fairness, or split parameters.
+
+pipeline:
+  random_state: 42
+
+  # Data paths (read-only)
+  training_data: "data/processed/splits/development_train.parquet"
+  validation_data: "data/processed/splits/validation.parquet"
+
+  # Existing model artifact (read-only, never overwritten by pipeline)
+  existing_model_path: "models/baseline/xgb_pipeline.pkl"
+
+  # Pipeline output directory for newly trained artifacts
+  output_model_dir: "models/pipeline_runs"
+  output_reports_dir: "reports/pipeline"
+
+  # Target column
+  target_column: "is_withdrawn"
+
+  # Columns that must NEVER appear in model input features
+  forbidden_feature_columns:
+    - "is_withdrawn"
+    - "final_result"
+    - "date_unregistration"
+    - "id_student"
+    - "gender"
+    - "disability"
+    - "age_band"
+    - "region"
+    - "imd_band"
+    - "missing_registration"
+    - "missing_socioeconomic_information"
+    - "assessment_submission_before_registration"
+    - "no_vle_activity_by_day28"
+
+  # Locked datasets — pipeline must NEVER read these
+  locked_datasets:
+    - "data/processed/splits/test.parquet"
+    - "data/processed/splits/final_holdout.parquet"
+
+  # MLflow (uses existing config values)
+  mlflow:
+    tracking_uri: "sqlite:///mlflow.db"
+    experiment_name: "student_dropout_automated_pipeline"
+
+  # Dry run: validates config and inputs without training
+  dry_run: false
