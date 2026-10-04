@@ -56,5 +56,39 @@ Data drift implies that the inputs to the model have changed structurally. Howev
 - **Small Sample Sizes**: Drift and fairness statistics calculated on very small batches are inherently noisy and unreliable. Fairness monitoring specifically suppresses reporting for groups with fewer than 30 samples.
 - **Simulation**: The current evaluation script (`evaluate_monitoring.py`) runs a simulated batch using the validation dataset. It does not represent live production traffic.
 
-## 14. Future extensions
+## 14. Dashboard and Alerting
+
+A lightweight operational monitoring dashboard and alert system are configured using **Prometheus** and **Grafana**. 
+
+### How to Start the Dashboard Locally
+Ensure Docker is installed, then run the monitoring stack from the project root:
+```bash
+docker-compose -f docker-compose.monitoring.yml up -d
+```
+- **Grafana Dashboard**: Accessible at [http://localhost:3000](http://localhost:3000) (Login: anonymous/viewer enabled, or admin/admin). The **MLOps Prediction Dashboard** is automatically provisioned and displays live application metrics.
+- **Prometheus**: Accessible at [http://localhost:9090](http://localhost:9090).
+
+### Dashboard Panels & Metric Sources
+The Grafana dashboard visualizes data sourced directly from the FastAPI `/metrics` endpoint:
+- **Prediction Request Rate**: Live requests per second (computed from `student_dropout_prediction_requests_total`).
+- **Prediction Error Rate**: Live errors per second (computed from `student_dropout_prediction_errors_total`).
+- **Prediction Latency**: 50th and 95th percentiles of response latency in seconds (computed from `student_dropout_prediction_latency_seconds_bucket`).
+
+**Important Note on Dashboard Scope**: Live application metrics are displayed in real-time. Complex data validations such as **Concept/Data Drift** and **Fairness Monitoring** require batch aggregations and historical comparisons. They are not displayed as live Prometheus metrics to avoid blocking prediction traffic. Instead, they remain batch-generated reports logged to MLflow or written to disk.
+
+### Alerts
+Prometheus is configured with specific Alert Rules (defined in `monitoring/prometheus/alerts.yml`):
+- **HighErrorRate (Critical)**: Triggers if more than 10% of prediction requests fail over a 1-minute window.
+- **HighLatency (Warning)**: Triggers if the 95th percentile prediction latency exceeds 1.0 second over a 1-minute window.
+- **InstanceDown (Critical)**: Triggers if the FastAPI prediction instance (`host.docker.internal:8000`) is unreachable for 1 minute.
+
+*Note: AlertManager is not configured for email/Slack notifications in this local demonstration. Alerts are evaluated and visible directly within the Prometheus UI under the "Alerts" tab.*
+
+### Stopping the Services
+To stop the monitoring stack without losing dashboard configurations (which are stateless and provisioned):
+```bash
+docker-compose -f docker-compose.monitoring.yml down
+```
+
+## 15. Future extensions
 This monitoring framework is designed to integrate into standard observability stacks. Application metrics can be scraped by Prometheus and visualized in Grafana. The Python-based batch scripts can be orchestrated via Apache Airflow or CI/CD pipelines to run periodically on new data exports, enabling automated alerting for substantial drift or fairness violations.

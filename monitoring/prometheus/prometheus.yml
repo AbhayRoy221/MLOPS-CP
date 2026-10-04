@@ -1,0 +1,14 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+rule_files:
+  - "/etc/prometheus/alerts.yml"
+
+scrape_configs:
+  - job_name: "mlops-api"
+    # Use host.docker.internal to reach the FastAPI app running on the host
+    static_configs:
+      - targets: ["host.docker.internal:8000"]
+        labels:
+          environment: "local"
