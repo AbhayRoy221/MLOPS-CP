@@ -31,6 +31,7 @@ class TestVleFeatures(unittest.TestCase):
         with patch('src.data.build_vle_features.pd.read_parquet') as mock_read_parquet, \
              patch('src.data.build_vle_features.pd.read_csv') as mock_read_csv, \
              patch('src.data.build_vle_features.os.path.exists') as mock_exists, \
+             patch('src.data.build_vle_features.os.makedirs'), \
              patch('src.data.build_vle_features.pd.DataFrame.to_parquet'):
             
             mock_exists.return_value = True

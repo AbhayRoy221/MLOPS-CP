@@ -38,8 +38,9 @@ class TestAssessmentFeatures(unittest.TestCase):
     @patch('src.data.build_assessment_features.pd.read_parquet')
     @patch('src.data.build_assessment_features.pd.read_csv')
     @patch('src.data.build_assessment_features.os.path.exists')
+    @patch('src.data.build_assessment_features.os.makedirs')
     @patch('src.data.build_assessment_features.pd.DataFrame.to_parquet')
-    def test_assessment_features(self, mock_to_parquet, mock_exists, mock_read_csv, mock_read_parquet):
+    def test_assessment_features(self, mock_to_parquet, mock_makedirs, mock_exists, mock_read_csv, mock_read_parquet):
         mock_exists.return_value = True
         mock_read_parquet.return_value = self.df_cohort
         

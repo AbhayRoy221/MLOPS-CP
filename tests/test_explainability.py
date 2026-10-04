@@ -9,12 +9,20 @@ class TestExplainability(unittest.TestCase):
     def setUpClass(cls):
         cls.explainer = SHAPExplainer()
         
-        # Load a few validation rows for testing
-        val_df = pd.read_parquet('data/processed/splits/validation.parquet')
-        cls.X_test = val_df[PREDICTIVE_FEATURES].head(5).copy()
+        # Create synthetic validation rows for testing
+        dummy_data = {}
+        for c in PREDICTIVE_FEATURES:
+            if c in ['highest_education', 'code_module', 'code_presentation']:
+                dummy_data[c] = ['A'] * 5
+            else:
+                dummy_data[c] = [0.0] * 5
+                
+        cls.X_test = pd.DataFrame(dummy_data)
+        
+        # Explicitly cast numerics to float64 to avoid imputer type conflicts
         num_cols = [c for c in PREDICTIVE_FEATURES if c not in ['highest_education', 'code_module', 'code_presentation']]
         for c in num_cols:
-            cls.X_test[c] = pd.to_numeric(cls.X_test[c], errors='coerce')
+            cls.X_test[c] = cls.X_test[c].astype(float)
 
     def test_explainer_loads_model(self):
         self.assertIsNotNone(self.explainer.pipeline)

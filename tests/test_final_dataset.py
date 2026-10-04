@@ -83,6 +83,7 @@ class TestFinalDataset(unittest.TestCase):
             
         with patch('src.data.assemble_day28_dataset.pd.read_parquet', side_effect=mock_read_parquet), \
              patch('src.data.assemble_day28_dataset.os.path.exists', return_value=True), \
+             patch('src.data.assemble_day28_dataset.os.makedirs'), \
              patch('src.data.assemble_day28_dataset.len', custom_len, create=True), \
              patch('src.data.assemble_day28_dataset.pd.DataFrame.to_parquet'):
             

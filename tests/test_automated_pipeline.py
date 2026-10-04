@@ -128,34 +128,51 @@ class TestPipelineConfiguration(unittest.TestCase):
 class TestInputValidation(unittest.TestCase):
     """Tests for input file existence and governance checks."""
 
-    def test_validate_inputs_passes_with_real_files(self):
+    @patch('os.path.exists', return_value=True)
+    def test_validate_inputs_passes_with_real_files(self, mock_exists):
         """Validate inputs succeeds when all required files exist."""
         config = load_pipeline_config('configs/pipeline_config.yaml')
         # This should not raise
         self.assertTrue(validate_inputs(config))
 
-    def test_validate_inputs_fails_missing_training_data(self):
+    @patch('os.path.exists')
+    def test_validate_inputs_fails_missing_training_data(self, mock_exists):
         """Missing training data raises FileNotFoundError."""
         config = load_pipeline_config('configs/pipeline_config.yaml')
         config['training_data'] = 'nonexistent/train.parquet'
+        
+        def exists_side_effect(path):
+            if path == 'nonexistent/train.parquet': return False
+            return True
+        mock_exists.side_effect = exists_side_effect
+        
         with self.assertRaises(FileNotFoundError):
             validate_inputs(config)
 
-    def test_validate_inputs_fails_missing_validation_data(self):
+    @patch('os.path.exists')
+    def test_validate_inputs_fails_missing_validation_data(self, mock_exists):
         """Missing validation data raises FileNotFoundError."""
         config = load_pipeline_config('configs/pipeline_config.yaml')
         config['validation_data'] = 'nonexistent/val.parquet'
+        
+        def exists_side_effect(path):
+            if path == 'nonexistent/val.parquet': return False
+            return True
+        mock_exists.side_effect = exists_side_effect
+        
         with self.assertRaises(FileNotFoundError):
             validate_inputs(config)
 
-    def test_validate_inputs_rejects_locked_as_training(self):
+    @patch('os.path.exists', return_value=True)
+    def test_validate_inputs_rejects_locked_as_training(self, mock_exists):
         """Using a locked dataset as training_data raises ValueError."""
         config = load_pipeline_config('configs/pipeline_config.yaml')
         config['training_data'] = config['locked_datasets'][0]
         with self.assertRaises((ValueError, FileNotFoundError)):
             validate_inputs(config)
 
-    def test_validate_inputs_rejects_locked_as_validation(self):
+    @patch('os.path.exists', return_value=True)
+    def test_validate_inputs_rejects_locked_as_validation(self, mock_exists):
         """Using a locked dataset as validation_data raises ValueError."""
         config = load_pipeline_config('configs/pipeline_config.yaml')
         # Point validation to the locked test set
@@ -365,19 +382,31 @@ class TestMLflowConfiguration(unittest.TestCase):
 class TestDryRunSafety(unittest.TestCase):
     """Tests proving dry-run does not train, overwrite, or access locked data."""
 
-    def test_dry_run_does_not_train(self):
+    @patch('src.pipeline.automated_pipeline.pd.read_parquet')
+    @patch('os.path.exists', return_value=True)
+    def test_dry_run_does_not_train(self, mock_exists, mock_read_parquet):
         """Dry-run completes without calling train_model."""
         from src.pipeline.automated_pipeline import run_dry_run
         config = load_pipeline_config('configs/pipeline_config.yaml')
+        
+        # Synthetic data to pass quality validation
+        df = _make_dummy_df(n_rows=20)
+        mock_read_parquet.return_value = df
 
         with patch('src.pipeline.automated_pipeline.train_model') as mock_train:
             result = run_dry_run(config)
             mock_train.assert_not_called()
 
-    def test_dry_run_does_not_overwrite_existing_model(self):
+    @patch('src.pipeline.automated_pipeline.pd.read_parquet')
+    @patch('os.path.exists', return_value=True)
+    def test_dry_run_does_not_overwrite_existing_model(self, mock_exists, mock_read_parquet):
         """Dry-run does not write to the existing model artifact path."""
         from src.pipeline.automated_pipeline import run_dry_run
         config = load_pipeline_config('configs/pipeline_config.yaml')
+        
+        df = _make_dummy_df(n_rows=20)
+        mock_read_parquet.return_value = df
+        
         existing_model = config.get('existing_model_path',
                                      'models/baseline/xgb_pipeline.pkl')
 
@@ -392,7 +421,8 @@ class TestDryRunSafety(unittest.TestCase):
             self.assertEqual(mtime_before, mtime_after,
                              "Dry-run modified the existing model artifact!")
 
-    def test_dry_run_does_not_read_locked_datasets(self):
+    @patch('os.path.exists', return_value=True)
+    def test_dry_run_does_not_read_locked_datasets(self, mock_exists):
         """Dry-run does not attempt to read test.parquet or final_holdout.parquet."""
         from src.pipeline.automated_pipeline import run_dry_run
         config = load_pipeline_config('configs/pipeline_config.yaml')
@@ -406,7 +436,7 @@ class TestDryRunSafety(unittest.TestCase):
             for locked_p in locked_paths:
                 if locked_p in path_str or os.path.basename(locked_p) in path_str:
                     accessed_locked.append(path_str)
-            return original_read_parquet(path, *args, **kwargs)
+            return _make_dummy_df(n_rows=20)
 
         with patch('src.pipeline.automated_pipeline.pd.read_parquet',
                    side_effect=tracked_read_parquet):
@@ -415,10 +445,16 @@ class TestDryRunSafety(unittest.TestCase):
         self.assertEqual(len(accessed_locked), 0,
                          f"Dry-run accessed locked datasets: {accessed_locked}")
 
-    def test_dry_run_returns_data_quality_info(self):
+    @patch('src.pipeline.automated_pipeline.pd.read_parquet')
+    @patch('os.path.exists', return_value=True)
+    def test_dry_run_returns_data_quality_info(self, mock_exists, mock_read_parquet):
         """Dry-run returns data quality info without error."""
         from src.pipeline.automated_pipeline import run_dry_run
         config = load_pipeline_config('configs/pipeline_config.yaml')
+        
+        df = _make_dummy_df(n_rows=20)
+        mock_read_parquet.return_value = df
+        
         result = run_dry_run(config)
         self.assertIn('train_rows', result)
         self.assertIn('val_rows', result)
