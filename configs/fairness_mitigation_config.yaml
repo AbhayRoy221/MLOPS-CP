@@ -1,0 +1,22 @@
+fairness_mitigation:
+  random_state: 42
+  validation_only_development: true
+  sensitive_attributes:
+    - "gender"
+    - "disability"
+    - "age_band"
+    - "region"
+    - "imd_band"
+  mitigation_methods:
+    - name: "ExponentiatedGradient"
+      type: "reduction"
+      constraints: 
+        - "DemographicParity"
+        - "EqualizedOdds"
+    - name: "ThresholdOptimizer"
+      type: "postprocessing"
+      constraints:
+        - "equalized_odds"
+        - "demographic_parity"
+  group_size_warning_threshold: 50
+  test_set_freeze_policy: "Evaluate exactly one frozen mitigation configuration on test set."

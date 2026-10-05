@@ -1,0 +1,5 @@
+risk_tier,intervention_level,human_review_required,recommended_actions
+LOW,monitoring,False,routine monitoring | provide standard learning resources | no immediate escalation
+MODERATE,academic check-in,False,academic check-in | study-planning support | recommend relevant learning resources | monitor engagement
+HIGH,advisor/tutor outreach,True,advisor/tutor outreach | personalized academic support | review recent engagement/assessment activity | consider follow-up by a human advisor
+CRITICAL,priority human review,True,priority human review | advisor intervention | individualized academic support | review relevant academic and engagement information | consider immediate supportive follow-up

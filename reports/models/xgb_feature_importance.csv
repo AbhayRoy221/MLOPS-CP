@@ -1,0 +1,40 @@
+feature,importance
+missingindicator_asm_mean_score,0.18635441
+code_module_CCC,0.119284004
+code_module_DDD,0.07459794
+code_module_GGG,0.058125388
+code_module_BBB,0.048085947
+code_module_EEE,0.04767433
+asm_failed_count,0.03890943
+asm_mean_score,0.0346132
+studied_credits,0.027964154
+code_module_FFF,0.026522378
+highest_education_Lower Than A Level,0.021940857
+asm_average_delay,0.021126708
+asm_submission_count,0.015550926
+code_module_AAA,0.0154796885
+highest_education_Post Graduate Qualification,0.01527261
+vle_active_days,0.015007315
+module_presentation_length,0.014678306
+vle_days_since_last_activity,0.014599809
+code_presentation_2013B,0.014532886
+code_presentation_2013J,0.014415601
+vle_quiz_clicks,0.014015028
+vle_clicks_last_7_days,0.013482464
+vle_total_clicks,0.013336677
+registration_day,0.012632528
+vle_activity_type_diversity,0.012526946
+num_of_prev_attempts,0.012480146
+vle_clicks_last_14_days,0.012113448
+highest_education_A Level or Equivalent,0.011746915
+vle_resource_clicks,0.01132301
+vle_forum_clicks,0.011221162
+highest_education_No Formal quals,0.010793719
+asm_score_std,0.010603122
+code_presentation_2014J,0.0103834625
+highest_education_HE Qualification,0.009904896
+code_presentation_2014B,0.008700604
+missingindicator_vle_days_since_last_activity,0.0
+missingindicator_asm_average_delay,0.0
+missingindicator_asm_score_std,0.0
+missingindicator_registration_day,0.0

@@ -1,0 +1,44 @@
+{
+  "pipeline_step": "2.14_automated_pipeline",
+  "execution_timestamp": "20261004_205904",
+  "execution_time_seconds": 4.66,
+  "dry_run": false,
+  "data_quality": {
+    "train_rows": 16810,
+    "train_positive_rate": 0.1816775728732897,
+    "val_rows": 3917,
+    "val_positive_rate": 0.18789890222108757,
+    "feature_count": 21
+  },
+  "training": {
+    "model_type": "xgboost",
+    "training_samples": 16810,
+    "training_features": 21,
+    "training_time_seconds": 0.48,
+    "model_artifact_path": "models/pipeline_runs\\xgb_pipeline_20261004_205905.pkl"
+  },
+  "validation_metrics": {
+    "val_accuracy": 0.8189941281593056,
+    "val_precision": 0.5957446808510638,
+    "val_recall": 0.11413043478260869,
+    "val_f1": 0.19156214367160776,
+    "val_roc_auc": 0.7205358241187486,
+    "val_pr_auc": 0.3914790075011831,
+    "val_log_loss": 0.43375980642881123,
+    "val_specificity": 0.9820811065702609,
+    "val_true_negatives": 3124,
+    "val_false_positives": 57,
+    "val_false_negatives": 652,
+    "val_true_positives": 84,
+    "val_fairness_gender_demographic_parity_difference": 0.02806231514365486,
+    "val_fairness_gender_demographic_parity_ratio": 0.416985733043507,
+    "val_fairness_gender_equalized_odds_difference": 0.04941724941724941
+  },
+  "mlflow_run_id": "3824b4498b094aa2b0bf950afc4f98eb",
+  "data_governance": {
+    "training_data": "data/processed/splits/development_train.parquet",
+    "validation_data": "data/processed/splits/validation.parquet",
+    "locked_datasets_accessed": false,
+    "existing_model_overwritten": false
+  }
+}

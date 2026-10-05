@@ -1,0 +1,2 @@
+coverage,abstention_rate,selective_accuracy,selective_precision,selective_recall,selective_f1,selective_fpr,risk_probability_mean,number_automatically_handled,number_routed_to_human_review,confidence_threshold
+1.0,0.0,0.8189941281593056,0.5957446808510638,0.11413043478260869,0.19156214367160776,0.017918893429739076,0.18124528229236603,3917,0,0.5

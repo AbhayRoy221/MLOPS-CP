@@ -1,0 +1,13 @@
+calibration:
+  random_state: 42
+  methods:
+    - "sigmoid"
+    - "isotonic"
+  cv: 5
+
+selective_prediction:
+  min_threshold: 0.50
+  max_threshold: 0.99
+  threshold_step: 0.01
+  primary_rule: "Choose the confidence threshold that produces the highest selective recall among operating points satisfying coverage >= 0.90"
+  secondary_rule: "If multiple thresholds have effectively identical selective recall, choose the one with higher selective precision."

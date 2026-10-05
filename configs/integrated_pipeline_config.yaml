@@ -1,0 +1,20 @@
+calibration:
+  random_state: 42
+  methods:
+    - "sigmoid"
+    - "isotonic"
+  cv: 5
+
+fairness:
+  sensitive_attribute: "gender"
+  constraint: "equalized_odds"
+
+selective_prediction:
+  min_threshold: 0.50
+  max_threshold: 0.99
+  threshold_step: 0.01
+
+risk_alert:
+  min_threshold: 0.05
+  max_threshold: 0.95
+  threshold_step: 0.05

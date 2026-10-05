@@ -1,0 +1,7 @@
+mlflow:
+  tracking_uri: "sqlite:///mlflow.db"
+  experiment_name: "student_dropout_baseline"
+  registered_model_names:
+    lr: "student_dropout_logistic_regression"
+    rf: "student_dropout_random_forest"
+    xgb: "student_dropout_xgboost"

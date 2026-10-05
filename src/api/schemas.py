@@ -28,7 +28,7 @@ class PredictiveFeatures(BaseModel):
     vle_resource_clicks: float = Field(..., ge=0, description="VLE clicks on standard resources")
     vle_quiz_clicks: float = Field(..., ge=0, description="VLE clicks on quizzes/assessments")
     vle_activity_type_diversity: float = Field(..., ge=0, description="Number of distinct VLE activity types accessed")
-
+    gender: Optional[str] = Field(None, description="Optional sensitive attribute for fairness-adjusted decision. Not used for probability prediction.")
 
 class SHAPExplanation(BaseModel):
     """
@@ -49,6 +49,9 @@ class PredictionResponse(BaseModel):
     human_review_required: bool = Field(..., description="Whether human review is required")
     intervention_level: str = Field(..., description="Level of intervention recommended")
     recommended_actions: List[str] = Field(..., description="Recommended actions for the advisor")
+    
+    fairness_adjusted_decision: Optional[int] = Field(None, description="Binary decision (1=Withdrawn) from ThresholdOptimizer")
+    fairness_status: str = Field(..., description="Status of the fairness decision (e.g., Applied, Unavailable: gender missing)")
     
     top_positive_contributors: Optional[List[SHAPExplanation]] = Field(None, description="Features pushing risk higher")
     top_negative_contributors: Optional[List[SHAPExplanation]] = Field(None, description="Features pushing risk lower")

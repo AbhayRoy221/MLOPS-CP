@@ -1,0 +1,8 @@
+split:
+  n_splits: 7
+  shuffle: True
+  random_state: 42
+  stratify_col: "is_withdrawn"
+  group_col: "id_student"
+  test_fold: 0
+  validation_fold: 1

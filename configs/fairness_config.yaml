@@ -1,0 +1,14 @@
+fairness:
+  sensitive_attributes:
+    - "gender"
+    - "disability"
+    - "age_band"
+    - "region"
+    - "imd_band"
+  target_attribute: "is_withdrawn"
+  min_group_size: 50
+  metrics:
+    - demographic_parity_difference
+    - demographic_parity_ratio
+    - equalized_odds_difference
+  random_state: 42

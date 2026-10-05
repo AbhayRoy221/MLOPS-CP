@@ -37,3 +37,13 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+# Data and Models
+/data/
+/models/
+/scratch/
+
+# MLflow
+/mlruns/
+/mlruns.db
+/mlflow.db
+/test_mlflow.db

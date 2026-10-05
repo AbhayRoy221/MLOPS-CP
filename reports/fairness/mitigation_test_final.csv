@@ -1,0 +1,2 @@
+model,sensitive_attribute,mitigation_method,fairness_constraint,accuracy,precision,recall,f1,roc_auc,demographic_parity_difference,demographic_parity_ratio,equalized_odds_difference
+xgb,gender,ThresholdOptimizer,equalized_odds,0.8150807899461401,0.5,0.1289875173370319,0.20507166482910694,0.5498619147415178,0.009874112286077236,0.8138469989014281,0.028372969154697447

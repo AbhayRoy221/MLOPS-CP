@@ -1,0 +1,2 @@
+coverage,abstention_rate,selective_accuracy,selective_precision,selective_recall,selective_f1,selective_fpr,risk_probability_mean,number_automatically_handled,number_routed_to_human_review,confidence_threshold,model,calibration_method
+0.9959152412560633,0.004084758743936656,0.8164573186362472,0.6923076923076923,0.024793388429752067,0.047872340425531915,0.0025196850393700786,0.16343694527064442,3901,16,0.51,lr,isotonic

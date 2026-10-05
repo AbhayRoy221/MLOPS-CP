@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import joblib
+import os
 from fastapi import HTTPException
 from src.intervention.intervention_engine import InterventionEngine
 from src.explainability.shap_explainer import SHAPExplainer
@@ -8,15 +9,19 @@ from src.api.schemas import PredictiveFeatures, PredictionResponse, SHAPExplanat
 from src.models.train_baselines import PREDICTIVE_FEATURES
 
 class InferenceService:
-    def __init__(self, model_path: str = 'models/baseline/xgb_pipeline.pkl'):
+    def __init__(self, model_path: str = 'models/baseline/xgb_pipeline.pkl', to_path: str = 'models/mitigated/xgb_threshold_optimizer_gender.pkl'):
         try:
             self.pipeline = joblib.load(model_path)
+            self.to_pipeline = None
+            if os.path.exists(to_path):
+                self.to_pipeline = joblib.load(to_path)
             self.intervention_engine = InterventionEngine()
             self.shap_explainer = SHAPExplainer(model_path=model_path)
             self.loaded = True
         except Exception as e:
             self.loaded = False
             self.pipeline = None
+            self.to_pipeline = None
             self.intervention_engine = None
             self.shap_explainer = None
             print(f"Failed to load model or explainers: {e}")
@@ -40,6 +45,22 @@ class InferenceService:
         try:
             # Inference
             prob = self.pipeline.predict_proba(df)[0, 1]
+            
+            # Fairness Decision
+            fairness_decision = None
+            fairness_status = "Unavailable: gender missing or mitigation model missing"
+            
+            if self.to_pipeline is not None and features.gender:
+                if features.gender not in ['M', 'F']:
+                    fairness_status = f"Unavailable: unsupported gender '{features.gender}'"
+                else:
+                    try:
+                        # Pass the exact sensitive attribute structure expected by TO
+                        A = pd.Series([features.gender])
+                        fairness_decision = int(self.to_pipeline.predict(df, sensitive_features=A)[0])
+                        fairness_status = "Applied"
+                    except Exception as e:
+                        fairness_status = f"Unavailable: {e}"
             
             # Intervention logic
             rec = self.intervention_engine.generate_recommendation(prob)
@@ -71,6 +92,8 @@ class InferenceService:
                 human_review_required=rec['human_review_required'],
                 intervention_level=rec['intervention_level'],
                 recommended_actions=rec['recommended_actions'],
+                fairness_adjusted_decision=fairness_decision,
+                fairness_status=fairness_status,
                 top_positive_contributors=top_pos,
                 top_negative_contributors=top_neg
             )
